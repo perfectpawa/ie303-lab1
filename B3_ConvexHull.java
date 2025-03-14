@@ -1,3 +1,10 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class B3_ConvexHull{
     //structure to represent a point
     public static class Point {
@@ -70,52 +77,35 @@ public class B3_ConvexHull{
 
     //function to read input from "B3_input.txt" file using System.in
     public static Point[] readInput() {
-        //initialize the number of points
-        int n;
+        List<Point> points = new ArrayList<>();
 
-        //initialize the points array
-        Point[] points;
+        try (Scanner scanner = new Scanner(new File("B3_input.txt"))) {
+            //read by line
+            //prevent first line
+            scanner.nextLine();
 
-        //read the number of points
-        n = 6;
+            while (scanner.hasNextLine()) {
+                String[] line = scanner.nextLine().split(" ");
+                Point point = new Point();
+                point.x = Double.parseDouble(line[0]);
+                point.y = Double.parseDouble(line[1]);
+                points.add(point);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        //initialize the points array
-        points = new Point[n];
-
-        //read the points
-        points[0] = new Point();
-        points[0].x = 2;
-        points[0].y = 1;
-
-        points[1] = new Point();
-        points[1].x = 1;
-        points[1].y = 3;
-
-        points[2] = new Point();
-        points[2].x = 2;
-        points[2].y = 3;
-
-        points[3] = new Point();
-        points[3].x = 2;
-        points[3].y = 4;
-
-        points[4] = new Point();
-        points[4].x = 4;
-        points[4].y = 1;
-
-        points[5] = new Point();
-        points[5].x = 4;
-        points[5].y = 3;
-
-
-        return points;
+        return points.toArray(new Point[0]);
     }
 
     //function to write output to "B3_output.txt" file using System.out
     public static void writeOutput(Point[] convexHull) {
-        //print out convex hull points to the console to test first
-        for (Point convexHull1 : convexHull) {
-            System.out.println(convexHull1.x + " " + convexHull1.y);
+        try (PrintWriter writer = new PrintWriter(new File("B3_output.txt"))) {
+            for (Point p : convexHull) {
+                writer.println((int) p.x + " " + (int) p.y);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
     
